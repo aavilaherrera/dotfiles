@@ -1,0 +1,10 @@
+[user]
+    name = Aram Avila-Herrera
+    email = aram@server.fake
+[core]
+    editor = vim
+[push]
+    default = simple
+[alias]
+    adog = log --all --decorate --oneline --graph
+    set-gh-email = config --local user.email aavilaherrera@users.noreply.github.com

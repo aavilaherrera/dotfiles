@@ -1,0 +1,13 @@
+---
+- defaults:
+    shell:
+      stdout: true
+      stderr: true
+
+- shell:
+    -
+      command: |
+
+        test -f ~/Brewfile && brew bundle install -f Brewfile ||
+          brew install git gcc wget parallel bash-completion pv pstree
+      description: Installing homebrew formulae

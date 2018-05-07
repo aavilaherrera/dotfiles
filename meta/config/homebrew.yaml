@@ -1,0 +1,10 @@
+---
+- defaults:
+    shell:
+      stdout: true
+      stderr: true
+
+- shell:
+    -
+      command: 'brew --version || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+      description: Installing homebrew

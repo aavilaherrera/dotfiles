@@ -1,0 +1,15 @@
+---
+- defaults:
+    link:
+      create: true
+      force: true
+    shell:
+      stdout: true
+
+- clean: ['~']
+
+- link:
+    ~/.bashrc: bash/bashrc
+    ~/.bash_profile: bash/bash_profile
+    ~/.gitconfig: gitconfig
+    ~/.vim/vimrc: vim/vimrc

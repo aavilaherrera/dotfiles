@@ -1,0 +1,89 @@
+# .bash_profile -- sets variables and functions for login shells
+
+# Path functions
+# https://stackoverflow.com/a/24522107
+# Old functions: https://superuser.com/a/1001014
+
+pre_path() {
+  local aux=":${!1}:"
+  aux=${aux//:$2:/:}; aux=${aux#:}; aux=${aux%:}
+  printf -v "$1" '%s' "${2}${aux:+:}${aux}"
+}
+
+add_path() {
+  local aux=":${!1}:"
+  aux=${aux//:$2:/:}; aux=${aux#:}; aux=${aux%:}
+  printf -v "$1" '%s' "${aux}${aux:+:}${2}"
+}
+
+del_path() {
+  local aux=":${!1}:"
+  aux=${aux//:$2:/:}; aux=${aux#:}; aux=${aux%:}
+  printf -v "$1" '%s' "$aux"
+}
+
+
+# Environment variables
+
+export EDITOR="vim"
+
+# Git
+export GIT_PS1_SHOWDIRTYSTATE=1
+
+# Homebrew
+# prefer homebrewed bins
+if which brew > /dev/null; then
+    _brew_prefix=$(brew --prefix)
+    pre_path PATH "${_brew_prefix}/sbin"
+    pre_path PATH "${_brew_prefix}/bin"
+    add_path PATH "$(${_brew_prefix}/opt/python/bin/python3 -m site --user-base)/bin"
+    if [ -f "${_brew_prefix}/etc/bash_completion" ]; then
+        . "${_brew_prefix}/etc/bash_completion"
+    fi
+fi
+
+# Caskroom
+export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+
+# pyenv pyenv-virtualenv
+if which pyenv > /dev/null; then eval "$(pyenv init --path)"; fi
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/usr/local/Caskroom/miniconda/base/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+        . "/usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+    else
+        export PATH="/usr/local/Caskroom/miniconda/base/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# rbenv
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# Java
+export CLASSPATH="${CLASSPATH}:."
+
+# Haskell
+pre_path PATH "${HOME}/.cabal/bin"
+
+# Extra bins
+pre_path PATH "${HOME}/.local/bin"
+
+if [ -f ~/.bash_profile-local ]; then
+    source ~/.bash_profile-local
+fi
+
+if [[ $- == *i* ]]; then
+    if [ -f ~/.bashrc ]; then
+        source ~/.bashrc
+    fi
+fi

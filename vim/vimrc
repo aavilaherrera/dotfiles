@@ -1,0 +1,137 @@
+" ViM -----------------------------------------------------------------
+set nocompatible
+set backspace=indent,eol,start
+set nomodeline
+" ---------------------------------------------------------------------
+
+
+" Vundle --------------------------------------------------------------
+filetype off    " required for Vundle
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-fugitive'
+
+Plugin 'vim-airline/vim-airline' " status line
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'chriskempson/base16-vim'
+
+Plugin 'ajh17/vimcompletesme'
+Plugin 'godlygeek/tabular'
+
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+
+Plugin 'vim-pandoc/vim-rmarkdown'
+Plugin 'jalvesaq/nvim-r'
+
+Plugin 'applescript.vim'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'elzr/vim-json'
+Plugin 'JuliaEditorSupport/julia-vim'
+
+Plugin 'Yggdroot/indentLine'
+
+Plugin 'dense-analysis/ale'
+Plugin 'Chiel92/vim-autoformat'
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+" ---------------------------------------------------------------------
+
+
+" Default behaviors ---------------------------------------------------
+set history=50  " keep 50 lines of command line history
+
+set tabstop=4  "tab is this number of spaces
+set shiftwidth=4  "indent is this many spaces with reindent operations
+set softtabstop=4  "columns to use in insert mode when tab is pressed
+set expandtab  "insert spaces when tab key is pressed
+
+set autoindent
+
+" tab completion for menus
+set wildmode=longest,list,full
+set wildmenu
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+
+set foldmethod=indent  "allow partial hiding of text
+" ---------------------------------------------------------------------
+
+
+" Default visuals  ----------------------------------------------------
+set ruler  " show the cursor position all the time
+set laststatus=2  " always show the status line
+set nu
+
+set showmatch
+set hls
+
+" cursor lines
+set cursorline "draw cursor line
+set cursorcolumn "draw cursor column
+" ---------------------------------------------------------------------
+
+
+" Filetype hacks ------------------------------------------------------
+augroup markdown_hack
+    if !exists("markdown_aus_loaded")
+        let markdown_aus_loaded = 1
+        autocmd BufNewFile,BufFilePre,BufRead *.md,*.markdown set filetype=markdown.pandoc
+        autocmd BufNewFile,BufFilePre,BufRead *.Rmd,*.rmd set filetype=rmarkdown.rmd
+    endif
+augroup END
+" ---------------------------------------------------------------------
+
+
+" Colorschemes --------------------------------------------------------
+syntax enable
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+" ---------------------------------------------------------------------
+
+
+" Some remaps ---------------------------------------------------------
+nnoremap tj :tabnext<CR>
+nnoremap tk :tabprev<CR>
+nnoremap te :tabedit<Space>
+nnoremap tn :tabnew<CR>
+nmap <Leader>f <Plug>(ale_fix)
+" ---------------------------------------------------------------------
+
+
+" Plugin configurations -----------------------------------------------
+" airline
+let g:airline_inactive_collapse=0
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_symbols.whitespace = '!'
+let g:airline_symbols.branch = '⎇⌥ '
+"call airline#parts#define_accent('branch', 'bold')
+
+" Yggdroot/indentLine
+let g:indentLine_enabled = 1
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_setColors = 1
+nnoremap <silent> <Leader>il :IndentLinesToggle<CR>
+
+" ale
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'r': ['styler'],
+\   'rmd': ['styler'],
+\   'python': ['black', 'reorder-python-imports', 'autopep8'],
+\   'yaml': ['yamlfix']
+\}
+"----------------------------------------------------------------------

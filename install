@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -e
+
+CONFIG_SUFFIX=".yaml"
+
+CONFIG_DIR="meta/config"
+PROFILES_DIR="meta/profile"
+
+DOTBOT="dotbot/bin/dotbot"
+
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+
+cd "${BASE_DIR}"
+git submodule update --init --recursive --remote
+
+if [ -f "${PROFILES_DIR}/$1" ]; then
+    CONFIGS=$(< "${PROFILES_DIR}/$1")
+    shift
+fi
+
+for config in ${CONFIGS} ${@}; do
+    _cfg="${CONFIG_DIR}/${config}${CONFIG_SUFFIX}"
+    if [ -f "$_cfg" ]; then
+        "$DOTBOT" -d "${BASE_DIR}" -c "$_cfg"
+    else
+        echo "[!] skipping '$_cfg' because it wasn't found" >&2
+    fi
+done

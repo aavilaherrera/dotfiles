@@ -1,0 +1,35 @@
+---
+- defaults:
+    shell:
+      stdout: true
+- shell:
+    -
+      command: defaults write -g NSDocumentSaveNewDocumentsToCloud -bool false
+      description: Disabling saving documents to iCloud (save to disk!)
+    -
+      command: sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.atrun.plist
+      description: Enabling 'at'
+    -
+      command: defaults write -g ApplePressAndHoldEnabled -bool false
+      description: Disabling \'press and hold\'
+    -
+      command: defaults write -g com.apple.swipescrolldirection -bool false
+      description: Disabling \'natural\' scrolling
+    -
+      command: defaults write com.apple.dashboard mcx-disabled -bool true
+      description: Disabling Dashboard
+    -
+      command: defaults write com.apple.finder DisableAllAnimations -bool true
+      description: Disabling some animations
+    -
+      command: defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+      description: Disabling creation of .DS_Store files on network volumes
+    -
+      command: defaults write -g AppleShowAllExtensions -bool true
+      description: "Finder: show all filename extensions"
+    -
+      command: defaults write com.apple.finder ShowPathbar -bool true
+      description: "Finder: show path bar"
+    -
+      command: defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+      description: "Spotlight: search in current folder by default"

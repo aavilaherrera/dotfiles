@@ -1,0 +1,23 @@
+---
+- defaults:
+    link:
+      create: true
+      force: true
+    clean:
+      recursive: true
+
+- clean: ['~/.vim']
+
+- link:
+    ~/.vimrc: vim/vimrc
+    ~/.vim/vimrc: vim/vimrc
+    ~/.vim/ftplugin/python.vim: vim/ftplugin/python.vim
+    ~/.vim/ftplugin/css.vim: vim/ftplugin/css.vim
+    ~/.vim/ftplugin/js.vim: vim/ftplugin/js.vim
+    ~/.vim/ftplugin/coffee.vim: vim/ftplugin/coffee.vim
+    ~/.vim/ftplugin/yaml.vim: vim/ftplugin/yaml.vim
+
+- shell:
+    -
+      command: vim -c ":PluginUpdate" -c "qa"
+      description: Updating vundle

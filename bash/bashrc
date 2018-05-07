@@ -1,0 +1,75 @@
+# .bashrc -- sets variables and functions for interactive shells
+# remote non-interactive login shells sometimes source .bashrc
+[[ $- != *i* ]] && return
+
+# Colors
+Reset="\[$(tput sgr0)\]"
+
+## Foreground Colors
+Black="\[$(tput setaf 0)\]"
+Red="\[$(tput setaf 1)\]"
+Green="\[$(tput setaf 2)\]"
+Yellow="\[$(tput setaf 3)\]"
+Blue="\[$(tput setaf 4)\]"
+Magenta="\[$(tput setaf 5)\]"
+Cyan="\[$(tput setaf 6)\]"
+White="\[$(tput setaf 7)\]"
+
+## Background Colors
+OBlack="\[$(tput setab 0)\]"
+ORed="\[$(tput setab 1)\]"
+OGreen="\[$(tput setab 2)\]"
+OYellow="\[$(tput setab 3)\]"
+OBlue="\[$(tput setab 4)\]"
+OMagenta="\[$(tput setab 5)\]"
+OCyan="\[$(tput setab 6)\]"
+OWhite="\[$(tput setab 7)\]"
+
+## Bold
+Bold="\[$(tput bold)\]"
+
+## Underline
+Uline="\[$(tput smul)\]"
+UnUline="\[$(tput rmul)\]"
+
+
+__printf_virtualenv(){
+    _fmt="${1}" # example: "\n--{%s}--"
+    if [ -n "${VIRTUAL_ENV}" ]; then
+        printf "$_fmt" $(basename ${VIRTUAL_ENV})
+    fi
+}
+
+__set_ps1(){
+    _ps1_info="${Magenta}[ ${Cyan}\u@\h${Reset}:${Blue}\w ${Magenta}]${Reset}"
+    _ps1_venv="$(__printf_virtualenv "${Magenta}{ ${Yellow}%s ${Magenta}}${Reset}")"
+
+    if [[ $(type -t __git_ps1) = function ]]; then
+        # 2 or 3 arguments sets PS1
+        # __git_ps1 <before> <after> <format>
+        # 0 or 1 arguments prints PS1 string
+        # __git_ps1 <fmt>
+        _ps1_git=$(__git_ps1 "${Magenta}{ ${Yellow}%s ${Magenta}}${Reset}")
+    fi
+
+    if [ -n "$_ps1_git$_ps1_venv" ]; then
+        PS1="$_ps1_info\n$_ps1_git$_ps1_venv \$ "
+    else
+        PS1="$_ps1_info\n\$ "
+    fi
+}
+
+PROMPT_COMMAND=__set_ps1
+
+# Base16 Colors --------------------------------------------------------------
+# Base16 Shell (for using 256-color Terminal themes)
+BASE16_SHELL=$HOME/.config/base16-shell/
+[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+
+export CLICOLOR=1
+
+alias ls='ls -G'
+
+if [ -f ~/.bashrc-local ]; then
+    source ~/.bashrc-local
+fi
