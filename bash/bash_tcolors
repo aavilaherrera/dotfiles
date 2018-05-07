@@ -1,0 +1,34 @@
+# ~/.bash/bash_tcolors : colors used to set PS1, sourced by ~/.bashrc
+#
+# Reset
+Reset="$(tput sgr0)"           # Reset Colors and Attributes
+
+# Colors
+## Foreground Colors
+Black="$(tput setaf 0)"        # Black
+Red="$(tput setaf 1)"          # Red
+Green="$(tput setaf 2)"        # Green
+Yellow="$(tput setaf 3)"       # Yellow
+Blue="$(tput setaf 4)"         # Blue
+Magenta="$(tput setaf 5)"      # Magenta
+Cyan="$(tput setaf 6)"         # Cyan
+White="$(tput setaf 7)"        # White
+
+## Background Colors
+OBlack="$(tput setab 0)"        # Black
+ORed="$(tput setab 1)"          # Red
+OGreen="$(tput setab 2)"        # Green
+OYellow="$(tput setab 3)"       # Yellow
+OBlue="$(tput setab 4)"         # Blue
+OMagenta="$(tput setab 5)"      # Magenta
+OCyan="$(tput setab 6)"         # Cyan
+OWhite="$(tput setab 7)"        # White
+
+# Attributes
+## Bold
+Bold="$(tput bold)"
+
+## Underline
+Uline="$(tput smul)"
+UnUline="$(tput rmul)"
+

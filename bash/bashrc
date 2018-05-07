@@ -1,0 +1,25 @@
+#!/bin/bash
+# ~/.bashrc
+#
+# Sourced by ~/.bash_profile
+
+source ~/.bash/bash_tcolors
+source ~/.bash/bash_funcs
+source ~/.bash/bash_vars
+source ~/.bash/bash_aliases
+
+if [ -f ~/.bash_private ]; then
+    source ~/.bash_private
+fi
+
+#### PS1 goes here ####
+color_prompt=true
+PS1=$(set_ps1 color_prompt)
+
+export CLICOLOR=1
+#export LSCOLORS="gxGxBxDxCxEgEdxbxgxcxd"
+#export LSCOLORS="gxfxbEaEBxxEhEhBaDaCaD"  # ls colors for solarized terminal
+
+export PS1
+export PATH
+

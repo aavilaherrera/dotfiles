@@ -1,0 +1,5 @@
+#!/bin/bash
+# ~/.bash_profile - Aram's .bash_profile
+
+source ~/.bashrc
+

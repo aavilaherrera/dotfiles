@@ -1,0 +1,10 @@
+- defaults:
+    shell:
+        stdout: true
+        stderr: true
+
+- shell:
+    -
+        command: brew install git gcc wget parallel bash-completion pv pstree
+    -
+        command: brew install moreutils --without-parallel

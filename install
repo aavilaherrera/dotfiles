@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -e
+
+CONFIG_SUFFIX=".yaml"
+
+META_DIR="meta"
+CONFIG_DIR="config"
+PROFILES_DIR="profile"
+
+DOTBOT_DIR="dotbot"
+DOTBOT_BIN="bin/dotbot"
+
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+
+cd "${BASE_DIR}"
+git submodule update --init --recursive --remote
+
+if [ -f "${META_DIR}/${PROFILES_DIR}/$1" ]; then
+    while IFS= read -r config; do
+        CONFIGS+=" ${config}"
+    done < "${META_DIR}/${PROFILES_DIR}/$1"
+
+    shift
+fi
+
+for config in ${CONFIGS} ${@}; do
+    echo -e "\nConfigure $config"
+    configContent="$(<"${BASE_DIR}/${META_DIR}/${CONFIG_DIR}/${config}${CONFIG_SUFFIX}")"
+    "${BASE_DIR}/${DOTBOT_DIR}/${DOTBOT_BIN}" -d "${BASE_DIR}" -c <(echo -e "$configContent")
+done
+

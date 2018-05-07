@@ -1,0 +1,57 @@
+#!/bin/bash
+# ~/.bash/bash_vars --- various environment variables (mostly paths)
+#
+# Sourced by ~/.bashrc
+#
+
+
+# Java -----------------------------------------------------------------------
+export CLASSPATH="${CLASSPATH}:."
+
+# PERL -----------------------------------------------------------------------
+# TEMP: TODO RECONFIGURE CPAN
+PATH="${HOME}/.local/perl5/bin${PATH+:}${PATH}"; export PATH;
+PERL5LIB="${HOME}/.local/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="${HOME}/.local/perl5${PERL_LOCAL_LIB_ROOT+:}${PERL_LOCAL_LIB_ROOT}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"${HOME}/.local/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=${HOME}/.local/perl5"; export PERL_MM_OPT;
+
+
+# Haskell --------------------------------------------------------------------
+pre_path "${HOME}/.cabal/bin"
+
+
+# Git  -----------------------------------------------------------------------
+export GIT_PS1_SHOWDIRTYSTATE=1
+
+
+# Android-SDK ----------------------------------------------------------------
+export ANDROID_HOME=/usr/local/opt/android-sdk
+
+
+# Homebrew -------------------------------------------------------------------
+# put /usr/local/bin before /usr/bin
+del_path "/usr/local/sbin"
+pre_path "/usr/local/sbin"
+del_path "/usr/local/bin"
+pre_path "/usr/local/bin"
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
+
+# Caskroom
+export HOMEBREW_CASK_OPTS="--appdir=~/Applications"
+
+# Base16 Colors --------------------------------------------------------------
+# Base16 Shell (for using 256-color Terminal themes)
+BASE16_SHELL=$HOME/.config/base16-shell/
+[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+
+# X11 Base16 Colors (set colorscheme for X11 applications; run this once)
+#curl https://raw.githubusercontent.com/chriskempson/base16-xresources/master/base16-tomorrow.dark.xresources > ~/.Xresources
+#xrdb -load ~/.Xresources
+
+
+# Extra bins -----------------------------------------------------------------
+pre_path "${HOME}/bin"
+

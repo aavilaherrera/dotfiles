@@ -1,0 +1,79 @@
+#!/bin/bash
+# ~/.bash/bash_funcs --- bash functions for dot files
+#
+# Sourced by ~/.bashrc
+
+# *** Path Functions  ***
+# https://superuser.com/a/1001014
+
+# is $1 missing from $2 (or PATH) ?
+no_path() {
+    eval "case :\$${2-PATH}: in *:$1:*) return 1;; *) return 0;; esac"
+}
+
+# if $1 exists and is not in path, append it
+add_path () {
+    [ -d ${1:-.} ] && no_path $* && eval ${2:-PATH}="\$${2:-PATH}:$1"
+}
+
+# if $1 exists and is not in path, prepend it
+pre_path () {
+    [ -d ${1:-.} ] && no_path $* && eval ${2:-PATH}="$1:\$${2:-PATH}"
+}
+
+# if $1 is in path, remove it
+del_path () {
+    no_path $* || eval ${2:-PATH}=`eval echo :'$'${2:-PATH}: |
+        sed -e "s;:$1:;:;g" -e "s;^:;;" -e "s;:\$;;"`
+}
+
+
+# *** PS1 ***
+
+# Put \[ and \] around non printing characters for proper line wrapping
+__virtualenv_ps1(){
+    FMT="${@}" # example: "\n--{%s}--"
+    if [ -n "${VIRTUAL_ENV}" ]; then
+        printf "$FMT" $(basename ${VIRTUAL_ENV})
+    fi
+}
+
+__ve_git_ps1(){
+    ve_fmt="${1}"
+    git_fmt="${2}"
+
+    ve=$(__virtualenv_ps1 "${ve_fmt}")
+    gt=$(__git_ps1 "${git_fmt}")
+
+
+    if [ -n "${ve}" ] && [ -n "${gt}" ]; then
+        printf "%s-%s" "${ve}" "${gt} "
+    elif [ -n "${ve}" ] || [ -n "${gt}" ]; then
+        printf "%s" "${ve}${gt} "
+    fi
+}
+
+set_ps1(){
+    color_prompt="${1}"
+    if [ -z "$color_prompt" ]; then
+        nc_ps1_base="[ \u@\h:\w ]"
+        nc_ps1_virtualenv='$(__virtualenv_ps1 "( py: %s )")'
+        nc_ps1_git='$(__git_ps1 "{ %s }")'
+        nc_ps1_ve_git='$(__ve_git_ps1 "( py: %s )" "{ %s }")'
+
+        echo -n "${nc_ps1_base}\n${nc_ps1_ve_git}$ "
+    else
+        test -f ~/.bash/bash_tcolors && source ~/.bash/bash_tcolors
+        ps1_base="\[${Magenta}\][ \[${Cyan}\]\u@\h\[${Reset}\]:\[${Blue}\]\w \[${Magenta}\]]\[${Reset}\]"
+
+        ve_fmt="\[${Bold}\]\[${Yellow}\]( \[${Green}\]py: %s\[${Yellow}\] )\[${Reset}\]"
+        git_fmt="\[${Magenta}\]{ \[${Yellow}\]%s\[${Magenta}\] }\[${Reset}\]"
+
+        ps1_virtualenv='$(__virtualenv_ps1 "${ve_fmt}"'
+        ps1_git='$(__git_ps1 "${git_fmt}")'
+        ps1_ve_git='$(__ve_git_ps1 "'"${ve_fmt}"'" "'"${git_fmt}"'")'
+
+        echo -n "${ps1_base}\n${ps1_ve_git}$ "
+    fi
+}
+

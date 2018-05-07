@@ -1,0 +1,10 @@
+[user]
+    name = Aram Avila-Herrera
+    email = aram@server.fake
+[core]
+    editor = vim
+[push]
+    default = simple
+[alias]
+    glo = log --all --graph --decorate --oneline
+    ghemail = config --local user.email aavilaherrera@users.noreply.github.com

@@ -1,0 +1,22 @@
+- defaults:
+    shell:
+        stdout: true
+
+- shell:
+    -
+        command: sudo tmutil disablelocal
+        description: Disabling local Time Machine snapshots
+    -
+        command: sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.atrun.plist
+        description: Enable 'at'
+    -
+        command: ''
+        description: |
+            Reminder:
+                Inspect launchctl for insecure services:
+                    launchctl list
+                    sudo launchctl list
+                References:
+                    - https://github.com/karek314/macOS-home-call-drop
+                    - https://github.com/drduh/macOS-Security-and-Privacy-Guide
+
